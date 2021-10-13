@@ -1,70 +1,91 @@
 #include "get_next_line.h"
 
-#define BUFFER_SIZE 42
+# include <fcntl.h>
 
-int findnl(char *buf)
+
+
+/*
+	PROCESS:
+
+	error check: return NULL
+
+	check for line in files, if EOF is in there return NULL
+	read into buf and check if there is newline, if not strjoin it onto the string in files
+	if there is we break and still strjoin, then we substr between the second to last and last newlines and return that
+
+*/
+
+int check_buf(char *buf)
 {
 	int i;
 
-	while(buf[i])
+	i = 0;
+	while (buf[i])
 	{
 		if (buf[i] == '\n')
 			return (1);
 		i++;
-	}
+	}	
 	return (0);
 }
 
-char	*ft_strrchr2(const char *s, int c)
+char *make_substr(char *files)
 {
-	int	i;
+	size_t	i;
+	int		end;
+	int		start;
 
-	i = ft_strlen(s);
-	while (i >= 0)
-	{	
-		if (s[i] == (unsigned char)c)
+	i = ft_strlen(files);
+	while(1)
+	{
+		if (files[i] == '\n')
+		{
+			end = i;
 			break ;
+		}
 		i--;
 	}
-	while (i >= 0)
-	{	
-		if (s[i] == (unsigned char)c)
-			return ((char *)&s[i]);
+	i--;
+	while(1)
+	{
+		if (files[i] == '\n')
+		{
+			start = i;
+			break ;
+		}
 		i--;
 	}
-	return (NULL);
+	return(ft_substr(files, start, (end-start)));
+
 }
-
-
 
 char	*get_next_line(int fd)
 {
-	static char	*prev;
-	int			s2lnewline;
-	char		buf[BUFFER_SIZE];
+	static char	*files[MAX_FD];
+	char		*buf;
+	int			i;
 
-	while (1)
+	i = 0;
+	if (fd < 0 || fd > MAX_FD || read(fd, buf, 0) < 0)
+		return (NULL);
+	while	(files[fd][i])
+	{
+		if (files[fd][i] == EOF)
+			return (NULL);
+		i++;
+	}
+	i = 0;
+	while (files[fd][i] != EOF)
 	{
 		read(fd, buf, BUFFER_SIZE);
-		if (findnl(buf))
-		{
-			prev = ft_strjoin(prev, buf);
+		if (!check_buf)
 			break ;
-		}
-		prev = ft_strjoin(prev, buf);
+		files[fd] = ft_strjoin(files[fd], buf);
+		while (files[fd][i])
+			i++;
 	}
-
-
-	return(ft_substr(prev,  ft_strrchr2, ft_strrchr(prev, '\n')));
-
-	/*
-		read into buf
-		check buf for newline
-		if not strjoin buf onto prev
-		else strjoin buf onto prev and break
-		find second to last \n in prev
-		print everything after
-	 */
+	files[fd] = ft_strjoin(files[fd], buf);
+	return(make_substr(files));
 }
 
 int	main()

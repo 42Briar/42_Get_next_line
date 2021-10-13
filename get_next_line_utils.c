@@ -1,23 +1,5 @@
 #include "get_next_line.h"
 
-char	*ft_strdup(const char *src)
-{
-	char	*copy;
-	int		i;
-
-	i = 0;
-	copy = (char *)malloc((ft_strlen(src) + 1) * sizeof(char));
-	if (!copy)
-		return (NULL);
-	while (src[i])
-	{
-		copy[i] = src[i];
-		i++;
-	}
-	copy[i] = 0;
-	return (copy);
-}
-
 size_t	ft_strlen(const char *str)
 {
 	size_t	i;
@@ -70,18 +52,4 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	ft_memmove(out + i1, s2, i2);
 	out[i1 + i2] = 0;
 	return (out);
-}
-
-char	*ft_strrchr(const char *s, int c)
-{
-	int	i;
-
-	i = ft_strlen(s);
-	while (i >= 0)
-	{	
-		if (s[i] == (unsigned char)c)
-			return ((char *)&s[i]);
-		i--;
-	}
-	return (NULL);
 }
