@@ -1,98 +1,90 @@
 #include "get_next_line.h"
 
-# include <fcntl.h>
+#include <fcntl.h>
 
+char	*ft_strjoin(char *s1, char *s2)
+{
+	char	*out;
+	size_t	i1;
+	size_t	i2;
 
+	if (!s1)
+		return (ft_strdup(s2));
+	i1 = ft_strlen(s1);
+	i2 = ft_strlen(s2);
+	out = malloc(sizeof(char) * (i1 + i2 + 1));
+	if (!out)
+		return (NULL);
+	ft_memmove(out, s1, i1);
+	free(s1);
+	s1 = NULL;
+	ft_memmove(out + i1, s2, i2);
+	out[i1 + i2] = 0;
+	return (out);
+}
 
-/*
-	PROCESS:
-
-	error check: return NULL
-
-	check for line in files, if EOF is in there return NULL
-	read into buf and check if there is newline, if not strjoin it onto the string in files
-	if there is we break and still strjoin, then we substr between the second to last and last newlines and return that
-
-*/
-
-int check_buf(char *buf)
+char *stringcircumcize(char *files, char *out)
 {
 	int i;
 
 	i = 0;
+	while (files[i] != '\n' && files[i])
+		i++;
+	out = ft_substr(files, 0, i + 1);
+	if (!out)
+		return (NULL);
+	ft_memmove(files, files + i + 1, (ft_strlen(files) + 1));
+	return (out);
+}
+
+int checknl(char *buf)
+{	
+	int i;
+
+	i = 0;
+	if (!buf)
+		return (0);
 	while (buf[i])
 	{
 		if (buf[i] == '\n')
 			return (1);
 		i++;
-	}	
+	}
 	return (0);
-}
-
-char *make_substr(char *files)
-{
-	size_t	i;
-	int		end;
-	int		start;
-
-	i = ft_strlen(files);
-	while(1)
-	{
-		if (files[i] == '\n')
-		{
-			end = i;
-			break ;
-		}
-		i--;
-	}
-	i--;
-	while(1)
-	{
-		if (files[i] == '\n')
-		{
-			start = i;
-			break ;
-		}
-		i--;
-	}
-	return(ft_substr(files, start, (end-start)));
-
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*files[MAX_FD];
-	char		*buf;
-	int			i;
+	static char *files[MAX_FD];
+	int			bread;
+	char		*out;
+	char		buf[BUFFER_SIZE + 1];
 
-	i = 0;
-	if (fd < 0 || fd > MAX_FD || read(fd, buf, 0) < 0)
+	if ((bread = read(fd, buf, 0) < 0))
 		return (NULL);
-	while	(files[fd][i])
+	if (checknl(files[fd]))
+		return (stringcircumcize(files[fd], out)); //check files[fd] for a newline;
+	bread = 1;
+	while (!checknl(buf) && bread > 0)
 	{
-		if (files[fd][i] == EOF)
-			return (NULL);
-		i++;
-	}
-	i = 0;
-	while (files[fd][i] != EOF)
-	{
-		read(fd, buf, BUFFER_SIZE);
-		if (!check_buf)
-			break ;
+		bread = read(fd, buf, BUFFER_SIZE);
+		buf[BUFFER_SIZE] = 0;
 		files[fd] = ft_strjoin(files[fd], buf);
-		while (files[fd][i])
-			i++;
+		if (checknl(files[fd]))
 	}
-	files[fd] = ft_strjoin(files[fd], buf);
-	return(make_substr(files));
+	return(stringcircumcize(files[fd], out));
 }
+
 
 int	main()
 {
 	int	fd = open("text.txt", O_RDONLY);
+	int fd2 = open("text2.txt", O_RDONLY);
 
-	get_next_line(fd);
-	get_next_line(fd);
-	get_next_line(fd);
+	printf("%s", get_next_line(fd));
+	// printf("%s", get_next_line(fd));
+	// printf("%s", get_next_line(fd2));
+	// printf("%s", get_next_line(fd));
+	// printf("%s", get_next_line(fd2));
+	// printf("%s", get_next_line(fd2));
 }
