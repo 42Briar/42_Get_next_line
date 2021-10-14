@@ -5,7 +5,7 @@
 # include <unistd.h>
 # include <stdio.h>
 
-#define BUFFER_SIZE 1000
+#define BUFFER_SIZE 15
 #define MAX_FD 1024
 /*
 -D<macroname>=<value>
@@ -19,7 +19,6 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 void	*ft_memmove(void *dst, const void *src, size_t len);
 char	*ft_strdup(const char *src);
 void	*ft_calloc(size_t n, size_t size);
-void	*ft_memset(void *dst, int c, size_t len);
 
 
 

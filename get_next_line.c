@@ -23,9 +23,9 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (out);
 }
 
-char *stringcircumcize(char *files, char *out)
+char	*stringcircumcize(char *files, char *out)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (files[i] != '\n' && files[i])
@@ -37,9 +37,9 @@ char *stringcircumcize(char *files, char *out)
 	return (out);
 }
 
-int checknl(char *buf)
+int	checknl(char *buf)
 {	
-	int i;
+	int	i;
 
 	i = 0;
 	if (!buf)
@@ -87,10 +87,10 @@ char	*get_next_line(int fd)
 int	main()
 {
 	int	fd = open("text.txt", O_RDONLY);
-	// int fd2 = open("text2.txt", O_RDONLY);
+	// int fd2 = open("text2.txt", O_RDONLY)
 
 	printf("%s", get_next_line(fd));
-	printf("%s\n", get_next_line(fd));
+	printf("%s", get_next_line(fd));
 	printf("%s", get_next_line(fd));
 	printf("%s", get_next_line(fd));
 	printf("%s", get_next_line(fd));
