@@ -5,7 +5,7 @@
 # include <unistd.h>
 # include <stdio.h>
 
-#define BUFFER_SIZE 10
+#define BUFFER_SIZE 1000
 #define MAX_FD 1024
 /*
 -D<macroname>=<value>
