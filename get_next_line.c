@@ -53,6 +53,14 @@ int	checknl(char *buf)
 	return (0);
 }
 
+char	*helper(char **files, char *out, char *buf)
+{
+	*files = ft_strjoin(*files, buf);
+	out = *files;
+	*files = NULL;
+	return (out);
+}
+
 char	*get_next_line(int fd)
 {
 	static char	*files[MAX_FD];
@@ -75,12 +83,7 @@ char	*get_next_line(int fd)
 			return (stringcircumcize(files[fd], out));
 	}
 	if (files[fd])
-	{
-		files[fd] = ft_strjoin(files[fd], buf);
-		out = files[fd];
-		files[fd] = NULL;
-		return (out);
-	}
+		return (helper(&files[fd], out, buf));
 	return (NULL);
 }
 
@@ -89,10 +92,6 @@ int	main()
 	int	fd = open("text.txt", O_RDONLY);
 	// int fd2 = open("text2.txt", O_RDONLY)
 
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
+	for (int i = 0; i < 60; i++)
+		printf("%s", get_next_line(fd));
 }
