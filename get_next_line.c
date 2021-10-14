@@ -1,6 +1,6 @@
 #include "get_next_line.h"
 
-char	*stringcircumcize(char *files, char *out)
+char	*stringcircumcise(char *files, char *out)
 {
 	int	i;
 
@@ -30,36 +30,31 @@ int	checknl(char *buf)
 	return (0);
 }
 
-char	*helper(char **files, char *out, char *buf)
-{
-	*files = ft_strjoin(*files, buf);
-	out = *files;
-	*files = NULL;
-	return (out);
-}
-
 char	*get_next_line(int fd)
 {
-	static char	*files[MAX_FD];
 	int			bread;
 	char		*out;
-	char		buf[BUFFER_SIZE + 1];
 
 	out = NULL;
-	if (checknl(files[fd]))
-		return (stringcircumcize(files[fd], out));
+	if (checknl(s_var.files[fd]))
+		return (stringcircumcise(s_var.files[fd], out));
 	bread = 1;
 	while (bread > 0)
 	{
-		bread = read(fd, buf, BUFFER_SIZE);
-		buf[bread] = 0;
+		bread = read(fd, s_var.buf, BUFFER_SIZE);
+		s_var.buf[bread] = 0;
 		if (bread == 0)
 			break ;
-		files[fd] = ft_strjoin(files[fd], buf);
-		if (checknl(files[fd]))
-			return (stringcircumcize(files[fd], out));
+		s_var.files[fd] = ft_strjoin(s_var.files[fd], s_var.buf);
+		if (checknl(s_var.files[fd]))
+			return (stringcircumcise(s_var.files[fd], out));
 	}
-	if (files[fd])
-		return (helper(&files[fd], out, buf));
+	if (s_var.files[fd])
+	{
+		s_var.files[fd] = ft_strjoin(s_var.files[fd], s_var.buf);
+		out = s_var.files[fd];
+		s_var.files[fd] = NULL;
+		return (out);
+	}
 	return (NULL);
 }
