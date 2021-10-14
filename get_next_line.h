@@ -5,21 +5,15 @@
 # include <unistd.h>
 # include <stdio.h>
 
-#define BUFFER_SIZE 15
-#define MAX_FD 1024
-/*
--D<macroname>=<value>
-		Adds  an implicit #define into the predefines buffer which is read before the source file is
-		preprocessed.
- */
+# define MAX_FD 1024
 
-char *get_next_line(int fd);
-size_t	ft_strlen(const char *str);
+char	*get_next_line(int fd);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
-void	*ft_memmove(void *dst, const void *src, size_t len);
 char	*ft_strdup(const char *src);
-void	*ft_calloc(size_t n, size_t size);
+char	*ft_strjoin(char *s1, char *s2);
 
+void	*ft_memmove(void *dst, const void *src, size_t len);
 
+size_t	ft_strlen(const char *str);
 
 #endif
