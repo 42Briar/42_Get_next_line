@@ -23,9 +23,9 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (out);
 }
 
-char *stringcircumcize(char *files, char *out)
+char	*stringcircumcize(char *files, char *out)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (files[i] != '\n' && files[i])
@@ -37,9 +37,9 @@ char *stringcircumcize(char *files, char *out)
 	return (out);
 }
 
-int checknl(char *buf)
+int	checknl(char *buf)
 {	
-	int i;
+	int	i;
 
 	i = 0;
 	if (!buf)
@@ -55,26 +55,27 @@ int checknl(char *buf)
 
 char	*get_next_line(int fd)
 {
-	static char *files[MAX_FD];
+	static char	*files[MAX_FD];
 	int			bread;
 	char		*out;
 	char		buf[BUFFER_SIZE + 1];
 
-	if ((bread = read(fd, buf, 0) < 0))
+	out = NULL;
+	bread = read(fd, buf, 0);
+	if (bread < 0)
 		return (NULL);
 	if (checknl(files[fd]))
-		return (stringcircumcize(files[fd], out)); //check files[fd] for a newline;
+		return (stringcircumcize(files[fd], out));
 	bread = 1;
 	while (!checknl(buf) && bread > 0)
 	{
 		bread = read(fd, buf, BUFFER_SIZE);
 		buf[BUFFER_SIZE] = 0;
 		files[fd] = ft_strjoin(files[fd], buf);
-		if (checknl(files[fd]))
+		// if (checknl(files[fd]))
 	}
-	return(stringcircumcize(files[fd], out));
+	return (stringcircumcize(files[fd], out));
 }
-
 
 int	main()
 {
@@ -82,9 +83,9 @@ int	main()
 	int fd2 = open("text2.txt", O_RDONLY);
 
 	printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd2));
-	// printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd2));
-	// printf("%s", get_next_line(fd2));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd2));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd2));
+	printf("%s", get_next_line(fd2));
 }
