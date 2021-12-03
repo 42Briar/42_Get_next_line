@@ -1,6 +1,6 @@
 #include "get_next_line.h"
 
-char	*stringcircumcise(char *files, char *out)
+static char	*stringcircumcise(char *files, char *out)
 {
 	int	i;
 
@@ -14,7 +14,7 @@ char	*stringcircumcise(char *files, char *out)
 	return (out);
 }
 
-int	checknl(char *buf)
+static int	checknl(char *buf)
 {	
 	int	i;
 
@@ -30,12 +30,22 @@ int	checknl(char *buf)
 	return (0);
 }
 
+static char	*helper(char **files, char *out, char *buf)
+{
+	*files = ft_strjoin(*files, buf);
+	out = *files;
+	*files = NULL;
+	return (out);
+}
+
 char	*get_next_line(int fd)
 {
 	int			bread;
 	char		*out;
 
 	out = NULL;
+	if (fd < 0 || fd > MAX_FD || read(fd, s_var.buf, 0) < 0)
+		return (NULL);
 	if (checknl(s_var.files[fd]))
 		return (stringcircumcise(s_var.files[fd], out));
 	bread = 1;
@@ -51,10 +61,7 @@ char	*get_next_line(int fd)
 	}
 	if (s_var.files[fd])
 	{
-		s_var.files[fd] = ft_strjoin(s_var.files[fd], s_var.buf);
-		out = s_var.files[fd];
-		s_var.files[fd] = NULL;
-		return (out);
+		return (helper(&s_var.files[fd], out, s_var.buf));
 	}
 	return (NULL);
 }
